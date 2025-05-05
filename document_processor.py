@@ -20,17 +20,22 @@ def extract_text_from_file(uploaded_file):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
             tmp_file.write(uploaded_file.read())
             tmp_path = tmp_file.name
-        doc = fitz.open(tmp_path)
-        text = "\n".join(page.get_text() for page in doc)
-        os.remove(tmp_path)
+        try:
+            doc = fitz.open(tmp_path)
+            text = "\n".join(page.get_text() for page in doc)
+        finally:
+            doc.close()
+            os.remove(tmp_path)
         return text
 
     elif uploaded_file.name.endswith(".docx"):
         with tempfile.NamedTemporaryFile(delete=False, suffix=".docx") as tmp_file:
             tmp_file.write(uploaded_file.read())
             tmp_path = tmp_file.name
-        text = docx2txt.process(tmp_path)
-        os.remove(tmp_path)
+        try:
+            text = docx2txt.process(tmp_path)
+        finally:
+            os.remove(tmp_path)
         return text
     else:
         return ""
