@@ -1,0 +1,9 @@
+streamlit
+chromadb
+llama-index
+openai
+python-docx
+pypdf2
+pymupdf
+docx2txt
+python-dotenv
